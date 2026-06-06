@@ -91,12 +91,13 @@ Token generation follows a 3-step procedure, all via the `TokenG` object.
 
 ## Encoders
 
-Two built-in encoders are available under `com.singularity_universe.tokeng.encoder`:
+Built-in encoders and their symmetric decoders are available under `com.singularity_universe.tokeng.encoder`:
 
-| Encoder | Output | Description |
-|---|---|---|
-| `Base64JsonEncoder` | Base64URL string | Serializes `TokenInfo` to JSON then Base64URL-encodes it. Simple, no dependencies beyond the library |
-| `JwtEncoder(algorithm)` | JWT string (`header.payload.signature`) | Encodes the token as a standard JWT. Algorithm defaults to `"HS256"` |
+| Encoder | Decoder | Output | Description |
+|---|---|---|---|
+| `JsonEncoder` | `JsonDecoder` | Raw JSON string | Simplest option — no encoding layer. Good for internal use or debugging |
+| `Base64JsonEncoder` | `Base64JsonDecoder` | Base64URL string | JSON serialized then Base64URL-encoded. Compact and URL-safe |
+| `JwtEncoder(algorithm)` | `JwtDecoder` | JWT (`header.payload.signature`) | Standard JWT format. Use `JwtEncoder.signingInput()` to get the string to sign before calling `TokenG.sign()` |
 
 You can also provide your own encoder by implementing `TokenEncoder`:
 
