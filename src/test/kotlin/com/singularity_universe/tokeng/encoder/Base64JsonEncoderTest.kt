@@ -66,6 +66,13 @@ class Base64JsonEncoderTest {
     }
 
     @Test
+    fun `decoded json contains signature`() {
+        val result = Base64JsonEncoder.encode(token)
+        val json = Json.parseToJsonElement(result.decodeBase64url()).jsonObject
+        assertEquals("test-signature", json["signature"]?.jsonPrimitive?.content)
+    }
+
+    @Test
     fun `different token info produces different output`() {
         val info2 = info.copy(subject = "user-999")
         val token2 = TokenG.sign(TokenG.generate(info2), "test-signature")

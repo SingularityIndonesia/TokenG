@@ -1,8 +1,9 @@
 package com.singularity_universe.tokeng.encoder
 
-import com.singularity_universe.tokeng.entity.Token
 import com.singularity_universe.tokeng.TokenG
+import com.singularity_universe.tokeng.entity.Token
 import com.singularity_universe.tokeng.entity.TokenInfo
+import com.singularity_universe.tokeng.entity.UnsignedToken
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 import kotlin.test.Test
@@ -28,7 +29,9 @@ class JwtEncoderTest {
         nonce = "a3f9c1"
     )
 
-    private val token: Token = TokenG.sign(TokenG.generate(info), "test-signature")
+    private val encoder = JwtEncoder()
+    private val unsigned: UnsignedToken = TokenG.generate(info)
+    private val token: Token = TokenG.sign(unsigned, "mock-hmac-signature")
 
     @Test
     fun `jwt has three parts separated by dots`() {
@@ -69,7 +72,7 @@ class JwtEncoderTest {
     fun `signature part matches token signature`() {
         val jwt = JwtEncoder().encode(token)
         val signature = jwt.split(".")[2]
-        assertEquals("test-signature", signature)
+        assertEquals("mock-hmac-signature", signature)
     }
 
     @Test
@@ -77,6 +80,20 @@ class JwtEncoderTest {
         val jwt = JwtEncoder().encode(token)
         val header = jwt.split(".")[0].decodeBase64url()
         assertTrue(header.contains("\"alg\":\"HS256\""))
+    }
+
+    @Test
+    fun `signingInput returns header dot payload`() {
+        val input = encoder.signingInput(unsigned)
+        assertEquals(2, input.split(".").size)
+    }
+
+    @Test
+    fun `signingInput matches header and payload in encoded jwt`() {
+        val jwt = encoder.encode(token)
+        val signingInput = encoder.signingInput(unsigned)
+        val jwtHeaderPayload = jwt.split(".").take(2).joinToString(".")
+        assertEquals(signingInput, jwtHeaderPayload)
     }
 
     @OptIn(ExperimentalEncodingApi::class)
