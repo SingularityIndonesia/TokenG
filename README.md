@@ -1,5 +1,11 @@
 # TokenG
 
+A Kotlin library for generating structured, signable tokens. TokenG handles token construction and encoding — signing is intentionally left to the caller, so you retain full authority over how tokens are authenticated.
+
+The generation flow is a 3-step procedure: **generate** an unsigned token, **sign** it with your own mechanism, then **encode** it to a string using a built-in or custom encoder.
+
+---
+
 ## The Standard Token
 
 A token in TokenG is composed of two parts: **Info** and a **Signature**.
