@@ -4,20 +4,24 @@
 
 A token in TokenG is composed of two parts: **Info** and a **Signature**.
 
+A token starts as an `UnsignedToken` after generation and becomes a `Token` only after signing. This is enforced at the type level — an unsigned token cannot be encoded.
+
 ```
-Token
-├── info: TokenInfo
-│   ├── purpose: String
-│   ├── issuer: String
-│   ├── subject: String
-│   ├── acknowledgements: List<String>
-│   ├── issuedAt: Instant
-│   ├── createdAt: Instant          (internal — auto-stamped by the system)
-│   ├── expiresAt: Instant?
-│   ├── scope: List<String>
-│   ├── metadata: Map<String, String>
-│   └── nonce: String?
-└── signature: String
+UnsignedToken               Token
+├── info: TokenInfo   ───►  ├── info: TokenInfo
+                            └── signature: String
+
+TokenInfo
+├── purpose: String
+├── issuer: String
+├── subject: String
+├── acknowledgements: List<String>
+├── issuedAt: Instant
+├── createdAt: Instant          (internal — auto-stamped by the system)
+├── expiresAt: Instant?
+├── scope: List<String>
+├── metadata: Map<String, String>
+└── nonce: String?
 ```
 
 ### Parts
@@ -55,7 +59,7 @@ Regardless of approach, the signature **should be unique per issuance**. Using `
 
 Token generation follows a 3-step procedure, all via the `TokenG` object.
 
-- `TokenG.generate(tokenInfo: TokenInfo): Token` 
+- `TokenG.generate(tokenInfo: TokenInfo): UnsignedToken` 
 
   Generate unsigned token, ex:
 
@@ -63,7 +67,7 @@ Token generation follows a 3-step procedure, all via the `TokenG` object.
   val token = TokenG.generate(info)
   ```
 
-- `TokenG.sign(token: Token, signature: String): Token`
+- `TokenG.sign(token: UnsignedToken, signature: String): Token`
 
   Attaches a signature to the token. Signing is the caller's responsibility — provide a signature derived from your own mechanism.
   
