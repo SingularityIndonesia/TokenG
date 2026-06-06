@@ -48,3 +48,48 @@ The signature can be anything that makes the token trustworthy and hard to forge
 - **Content hash** — e.g. SHA-256 of the token info. Deterministic and unique per content, but does not prove authenticity on its own without a secret key.
 
 Regardless of approach, the signature **should be unique per issuance**. Using `nonce` or `issuedAt` in your signing input helps ensure this.
+
+---
+
+## Methods
+
+Token generation follows a 3-step procedure, all via the `TokenG` object.
+
+- `TokenG.generate(tokenInfo: TokenInfo): Token` 
+
+  Generate unsigned token, ex:
+
+  ```kotlin
+  val token = TokenG.generate(info)
+  ```
+
+- `TokenG.sign(token: Token, signature: String): Token`
+
+  Attaches a signature to the token. Signing is the caller's responsibility — provide a signature derived from your own mechanism.
+  
+  ```kotlin
+  val signed = TokenG.sign(token, mySignature)
+  ```
+
+- `TokenG.encode(token: Token, encoder: TokenEncoder): String`
+
+  Encodes the token into a string using the provided encoder. Returns the final token string ready for use.
+  
+  ```kotlin
+  val result = TokenG.encode(signed, Base64JsonEncoder)
+  ```
+
+## Encoders
+
+Two built-in encoders are available under `com.singularity_universe.tokeng.encoder`:
+
+| Encoder | Output | Description |
+|---|---|---|
+| `Base64JsonEncoder` | Base64URL string | Serializes `TokenInfo` to JSON then Base64URL-encodes it. Simple, no dependencies beyond the library |
+| `JwtEncoder(algorithm)` | JWT string (`header.payload.signature`) | Encodes the token as a standard JWT. Algorithm defaults to `"HS256"` |
+
+You can also provide your own encoder by implementing `TokenEncoder`:
+
+```kotlin
+val customEncoder = TokenEncoder { token -> "my-format:${token.signature}" }
+```
