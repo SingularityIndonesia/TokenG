@@ -1,7 +1,7 @@
 package com.singularity_universe.tokeng.entity
 
 /**
- * Represents a generated token.
+ * Represents a signed token, ready to be encoded.
  *
  * @param info      The metadata describing the token's purpose, issuer, subject, etc.
  * @param signature The unique value that authenticates this token. It is the caller's
@@ -10,6 +10,6 @@ package com.singularity_universe.tokeng.entity
  *                  function to prevent collision across token instances.
  */
 data class Token(
-    val info: TokenInfo,
-    val signature: String = "UNSIGNED"
-)
+    override val info: TokenInfo,
+    val signature: String
+) : BaseToken()

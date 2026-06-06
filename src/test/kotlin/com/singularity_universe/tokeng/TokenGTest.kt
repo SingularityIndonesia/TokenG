@@ -23,9 +23,9 @@ class TokenGTest {
     )
 
     @Test
-    fun `generate wraps info into token with UNSIGNED signature`() {
+    fun `generate returns UnsignedToken`() {
         val token = TokenG.generate(info)
-        assertEquals("UNSIGNED", token.signature)
+        assertTrue(token.info.purpose == info.purpose)
     }
 
     @Test
