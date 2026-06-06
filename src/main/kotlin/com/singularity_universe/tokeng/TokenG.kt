@@ -24,4 +24,9 @@ object TokenG {
     fun encode(token: Token, encoder: TokenEncoder): String {
         return encoder.encode(token)
     }
+
+    /** Decode an encoded token string back into a [Token] using the given [decoder]. */
+    fun decode(encoded: String, decoder: TokenDecoder): Token {
+        return decoder.decode(encoded)
+    }
 }
