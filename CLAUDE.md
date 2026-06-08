@@ -11,6 +11,35 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ./gradlew test --tests "com.singularity_universe.tokeng.encoder.JwtEncoderTest.signingInput*"  # run a single test
 ```
 
+## Publishing
+
+Publishing targets **Maven Central** via the Sonatype Central Portal OSSRH Staging API.
+
+**Prerequisites:**
+- GPG key configured in `~/.gradle/gradle.properties` (`signing.keyId`, `signing.password`, `signing.secretKeyRingFile`)
+- Central Portal User Tokens in `local.properties` (never commit this file — it is gitignored):
+  ```
+  TOKENG_SONATYPE_TokenG_Project_USERNAME=<token username>
+  TOKENG_SONATYPE_TokenG_Project_PASSWORD=<token password>
+  ```
+  Generate tokens at central.sonatype.com → Account → Generate User Token.
+
+**Steps:**
+
+1. Publish artifacts:
+   ```bash
+   ./gradlew publishMavenKotlinPublicationToCentralPortalRepository
+   ```
+
+2. Trigger visibility in the Central Portal (run from the same machine/IP as the upload):
+   ```bash
+   curl -X POST \
+     -u "<username>:<password>" \
+     "https://ossrh-staging-api.central.sonatype.com/manual/upload/defaultRepository/com.singularity-universe"
+   ```
+
+3. Log in to central.sonatype.com → **Deployments** → review → click **Publish**.
+
 ## Architecture
 
 TokenG is a Kotlin/JVM library (Gradle, Kotlin 2.3, `kotlinx-serialization-json`). All source lives under `com.singularity_universe.tokeng`.
