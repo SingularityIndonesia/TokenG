@@ -8,7 +8,7 @@ The generation flow is a 3-step procedure: **generate** an unsigned token, **sig
 
 ## Installation
 
-Available on Maven Central.
+Available on Maven Central: https://central.sonatype.com/artifact/com.singularity-universe.tokeng/TokenG
 
 ```kotlin
 implementation("com.singularity-universe.tokeng:TokenG:1.0.0-rc1")
