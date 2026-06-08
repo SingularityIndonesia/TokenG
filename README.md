@@ -6,6 +6,16 @@ The generation flow is a 3-step procedure: **generate** an unsigned token, **sig
 
 ---
 
+## Installation
+
+Available on Maven Central.
+
+```kotlin
+implementation("com.singularity-universe.tokeng:TokenG:1.0.0-rc1")
+```
+
+---
+
 ## The Standard Token
 
 A token in TokenG is composed of two parts: **Info** and a **Signature**.
