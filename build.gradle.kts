@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "com.singularity-universe.tokeng"
-version = "1.0.0-rc1"
+version = "1.0.0"
 
 repositories {
     mavenCentral()
