@@ -1,10 +1,5 @@
 import java.util.Properties
 
-val localProperties = Properties().apply {
-    val f = rootProject.file("local.properties")
-    if (f.exists()) f.inputStream().use { load(it) }
-}
-
 plugins {
     kotlin("jvm") version "2.3.0"
     kotlin("plugin.serialization") version "2.3.0"
@@ -80,11 +75,9 @@ publishing {
             name = "CentralPortal"
             url = uri("https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/")
             credentials {
-                username = (localProperties["TOKENG_SONATYPE_TokenG_Project_USERNAME"] as String?)
-                    ?: (project.findProperty("TOKENG_SONATYPE_TokenG_Project_USERNAME") as String?)
+                username = (project.findProperty("TOKENG_SONATYPE_TokenG_Project_USERNAME") as String?)
                     ?: System.getenv("TOKENG_SONATYPE_TokenG_Project_USERNAME")
-                password = (localProperties["TOKENG_SONATYPE_TokenG_Project_PASSWORD"] as String?)
-                    ?: (project.findProperty("TOKENG_SONATYPE_TokenG_Project_PASSWORD") as String?)
+                password = (project.findProperty("TOKENG_SONATYPE_TokenG_Project_PASSWORD") as String?)
                     ?: System.getenv("TOKENG_SONATYPE_TokenG_Project_PASSWORD")
             }
         }
