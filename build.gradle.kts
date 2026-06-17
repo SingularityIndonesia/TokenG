@@ -1,10 +1,9 @@
-import java.util.Properties
-
 plugins {
     kotlin("jvm") version "2.3.0"
     kotlin("plugin.serialization") version "2.3.0"
     `maven-publish`
     signing
+    id("com.gradleup.nmcp") version "0.0.9"
 }
 
 group = "com.singularity-universe.tokeng"
@@ -70,17 +69,15 @@ publishing {
             }
         }
     }
-    repositories {
-        maven {
-            name = "CentralPortal"
-            url = uri("https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/")
-            credentials {
-                username = (project.findProperty("TOKENG_SONATYPE_TokenG_Project_USERNAME") as String?)
-                    ?: System.getenv("TOKENG_SONATYPE_TokenG_Project_USERNAME")
-                password = (project.findProperty("TOKENG_SONATYPE_TokenG_Project_PASSWORD") as String?)
-                    ?: System.getenv("TOKENG_SONATYPE_TokenG_Project_PASSWORD")
-            }
-        }
+}
+
+nmcp {
+    publish("mavenKotlin") {
+        username = (project.findProperty("TOKENG_SONATYPE_TokenG_Project_USERNAME") as String?)
+            ?: System.getenv("TOKENG_SONATYPE_TokenG_Project_USERNAME") ?: ""
+        password = (project.findProperty("TOKENG_SONATYPE_TokenG_Project_PASSWORD") as String?)
+            ?: System.getenv("TOKENG_SONATYPE_TokenG_Project_PASSWORD") ?: ""
+        publicationType = "AUTOMATIC"
     }
 }
 
